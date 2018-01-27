@@ -1,13 +1,13 @@
 package com.todoproject.sample.services;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.todoproject.sample.dao.UserRepository;
-import com.todoproject.sample.model.ProfileModel;
 import com.todoproject.sample.model.UserModel;
 
 @Service
@@ -16,12 +16,16 @@ public class UserServices {
 	@Autowired
 	private UserRepository userRepo;
 	
-	public UserModel doLogin(String userId, String secretCode) {
-		UserModel userModel = userRepo.findOne(userId);
-		if(secretCode.equals(userModel.getSecretCode())){
-			return userModel;
+	public ResponseEntity<UserModel> doLogin(String userId, String secretCode) {
+		if(userId!=null){
+			UserModel userModel = userRepo.findOne(userId);
+			if(secretCode.equals(userModel.getSecretCode())){
+				return new ResponseEntity<UserModel>(userModel, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<UserModel>(userModel, HttpStatus.EXPECTATION_FAILED);				
+			}
 		} else {
-			return null;
+			return new ResponseEntity<UserModel>(new UserModel(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -34,30 +38,32 @@ public class UserServices {
 		return userModel;
 	}
 
-	public String updateUserProfile(ProfileModel profile) {
-		UserModel userModel = userRepo.findOne(profile.getId());
-		userModel.setProfile(profile);
+	public ResponseEntity<UserModel> updateUserProfile(UserModel userProfile) {
+		UserModel userModel = userRepo.findOne(userProfile.getId());
 		try{
 			userRepo.save(userModel);
-			return "success";
+			return new ResponseEntity<UserModel>(userModel, HttpStatus.ACCEPTED);
 		} catch(Exception e){
-			return "error";
+			return new ResponseEntity<UserModel>(userModel, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	public ProfileModel getUserProfile(String userId) {
-		return userRepo.findOne(userId).getProfile();
+	public UserModel getUserProfile(String userId) {
+		return userRepo.findOne(userId);
 	}
 
-	public String createUser(ProfileModel profile) {
-		UserModel userModel = new UserModel();
-		userModel.setId(profile.getId());
-		userModel.setProfile(profile);
-		userModel.setSecretCode(profile.getSecretCode());
-		userModel.setMailId(profile.getId());
-		userModel.setToDoIds(new HashMap<String, String>());
-		userRepo.save(userModel);
-		return null;
+	public ResponseEntity<UserModel> createUser(UserModel userModel) {
+		UserModel userObj = userRepo.findOne(userModel.getMailId());
+		if(null!=userObj){
+			return new ResponseEntity<UserModel>(userObj, HttpStatus.EXPECTATION_FAILED);
+		} else {
+			try{
+				userRepo.save(userModel);
+				return new ResponseEntity<UserModel>(userModel, HttpStatus.ACCEPTED);
+			} catch(Exception e){
+				return new ResponseEntity<UserModel>(userModel, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 	}
 
 }

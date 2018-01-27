@@ -7,17 +7,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class UserModel {
 	private String id;
+	private String fullName;
 	private String mailId;
 	private String secretCode;
 	private String lastSeen;
-	private ProfileModel profile;
-	private Map<String, String> toDoIds;
+	private String dateOfBirth;
 	
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	public String getMailId() {
 		return mailId;
@@ -37,16 +43,11 @@ public class UserModel {
 	public void setLastSeen(String lastSeen) {
 		this.lastSeen = lastSeen;
 	}
-	public ProfileModel getProfile() {
-		return profile;
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
-	public void setProfile(ProfileModel profile) {
-		this.profile = profile;
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
-	public Map<String, String> getToDoIds() {
-		return toDoIds;
-	}
-	public void setToDoIds(Map<String, String> toDoIds) {
-		this.toDoIds = toDoIds;
-	}
+	
 }

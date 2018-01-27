@@ -1,10 +1,8 @@
 package com.todoproject.sample.services;
 
-import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.todoproject.sample.dao.ToDoRepository;
@@ -21,35 +19,37 @@ public class ToDoServices {
 	@Autowired
 	private UserRepository userRepo;
 	
-	public ToDoModel getToDoForUser(String toDoId) {
-		return toDoRepo.findOne(toDoId);
+	public ResponseEntity<ToDoModel> getToDoForUser(String toDoId) {
+		ToDoModel toDoObj = toDoRepo.findOne(toDoId);
+		if(toDoObj!=null){
+			return new ResponseEntity<ToDoModel>(toDoObj, HttpStatus.ACCEPTED);
+		} else {
+			toDoObj = new ToDoModel();
+			toDoObj.setId(toDoId);
+			return new ResponseEntity<ToDoModel>(toDoObj, HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
-	public ToDoModel createToDoForUser(String userId, ToDoModel toDoModel) {
+	public ResponseEntity<ToDoModel> createToDoForUser(String userId, ToDoModel toDoModel) {
 		UserModel user = userRepo.findOne(userId);
-		Date d = new Date();
+		toDoModel.setId(userId);
+		try{
+			toDoRepo.save(toDoModel);
+			return new ResponseEntity<ToDoModel>(toDoModel, HttpStatus.ACCEPTED);
+		} catch(Exception e){
+			return new ResponseEntity<ToDoModel>(toDoModel, HttpStatus.EXPECTATION_FAILED);			
+		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
-		String dateStr = sdf.format(d);
-		// encode data on your side using BASE64
-		String bytesEncoded = Base64.getEncoder().encodeToString((dateStr+userId).getBytes());
-		System.out.println("ecncoded value is " + bytesEncoded );
-
-		// Decode data on other side, by processing encoded data
-		byte[] valueDecoded = Base64.getDecoder().decode(bytesEncoded );
-		System.out.println("Decoded value is " + new String(valueDecoded));
-		toDoModel.setId(bytesEncoded);
-		toDoRepo.save(toDoModel);
-		user.getToDoIds().put(dateStr, bytesEncoded);
-		userRepo.save(user);
-		return toDoModel;
 	}
 
-	public ToDoModel updateToDo(ToDoModel toDoModel) {
-		ToDoModel toDo = toDoRepo.findOne(toDoModel.getId());
-		toDo.setTaskList(toDo.getTaskList());
-		toDoRepo.save(toDo);
-		return toDo;
+	public ResponseEntity<ToDoModel> updateToDo(ToDoModel toDoModel) {
+		//ToDoModel toDo = toDoRepo.findOne(toDoModel.getId());
+		try{
+			toDoRepo.save(toDoModel);
+			return new ResponseEntity<ToDoModel>(toDoModel, HttpStatus.ACCEPTED);
+		} catch(Exception e){
+			return new ResponseEntity<ToDoModel>(toDoModel, HttpStatus.EXPECTATION_FAILED);			
+		}
 	}
 
 }
