@@ -1,0 +1,46 @@
+<div ng-controller="ToDoCtrl">
+   	<br>
+   	<br>
+   	<br>
+   	<div class="row">
+   		<div class="col-md-9">
+   			<h4>Welcome {{userMail}} below is user ToDo list.</h4>
+   		</div>
+   		<div ng-click="logout()" class="col-md-3 glyphicon glyphicon-off" title="LogOut"><h4>Logout</h4>
+   		</div>   		
+   	</div>
+   	<br>
+   	<br>
+	<div class="row">
+   			<div class="col-md-9">
+   				<input type="text" class="col-md-9" placeholder="Please input what needs to be done?" ng-model="toDoText"/>
+   			</div>
+			<div class="col-md-3">
+				<span><div ng-click="createToDo(toDoText)" class="glyphicon glyphicon-plus" title="Add ToDo"></div></span>
+			</div> 
+	 </div>
+	 <br>
+	<div class="row" ng-model="toDoList">
+		<div class="row" ng-repeat="toDo in toDoList">
+			<!-- <div class="row" ng-repeat="toDo in value"> -->
+				<div ng-if="!toDo.edit">
+					<div class="col-md-9">
+						<p class="col-md-9" ng-style="{'text-decoration': {true:'line-through',false:''}[toDo.isCompleted]}">{{toDo.toDoText}}</p>
+					</div>
+					<div class="col-md-3">
+						<span><p ng-click="editToDo(toDo)" class="glyphicon glyphicon-pencil" title="Edit ToDo?"></p></span>
+						<span><p ng-click="completeToDo(toDo)" class="glyphicon glyphicon-ok" title="Mark Completed"></p></span>
+						<span><p ng-click="deleteToDo(toDo)" class="glyphicon glyphicon-trash" title="Delete ToDo?"></p></span>
+					</div>
+				</div>
+				<div ng-if="toDo.edit" class="col-md-9">
+					<input class="col-md-9" type="text" ng-model="toDo.toDoText"/>
+					<button ng-click="updateToDo(toDo)">Save</button>
+				</div>
+				<!-- </div> -->
+		</div>
+	</div>
+	<div class="row" style="text-align: center;">
+		<button ng-click="saveToDos()">Save For Later</button>
+	</div>
+</div>
