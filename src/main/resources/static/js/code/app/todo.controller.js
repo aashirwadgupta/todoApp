@@ -8,13 +8,13 @@ myApp.controller("ToDoCtrl", function($scope, $http, $localStorage, $location, n
 		if(userId!=undefined){
 			$http.get(path+"/api/getToDo?id="+userId).
 			then(function(response) {
-				console.log("from upper");
-				console.log(response.data);
+				//console.log("from upper");
+				//console.log(response.data);
 				$scope.userMail = response.data.id;
 				$scope.toDoList = response.data.taskList;
 			}, function(response){
-				console.log("from lower");
-				console.log($localStorage.email);
+				//console.log("from lower");
+				//console.log($localStorage.email);
 			});
 		} else {
 			$location.path("");
@@ -57,45 +57,47 @@ myApp.controller("ToDoCtrl", function($scope, $http, $localStorage, $location, n
 					//toDoArr.push(newToDo);
 					//toDoObject[dateKey] = toDoArr;
 				}*/
-				console.log(toDoArr);
+				//console.log(toDoArr);
 				//console.log(toDoObject);
 				$scope.toDoList = toDoArr;
 			} else {
 				var toDoArrIn = [newToDo];
 				$scope.toDoList = toDoArrIn;
 				//console.log(toDoArrIn);
-				console.log($scope.toDoList);
+				//console.log($scope.toDoList);
 			}
 		}
 		$scope.toDoText=null;
 	}
 	
 	$scope.editToDo = function(toDoItem){
-		console.log(toDoItem);
+		//console.log(toDoItem);
 		var i = $scope.toDoList.indexOf(toDoItem);
-		console.log(i);
+		//console.log(i);
 		toDoItem.edit = true;
-		console.log(toDoItem);
+		//console.log(toDoItem);
 		$scope.toDoList[i] = toDoItem;
 		//delete $scope.toDoList[i];
 	}
 	
 	$scope.updateToDo = function(toDoItem){
-		console.log(toDoItem);
+		//console.log(toDoItem);
 		var i = $scope.toDoList.indexOf(toDoItem);
-		console.log(i);
+		//console.log(i);
 		toDoItem.edit = false;
-		console.log(toDoItem);
+		var toDoTime = dateObj.getTime();
+		toDoItem.toDoTime=toDoTime;
+		//console.log(toDoItem);
 		$scope.toDoList[i] = toDoItem;
 		//delete $scope.toDoList[i];
 	}
 	
 	$scope.completeToDo = function(toDoItem){
-		console.log(toDoItem);
+		//console.log(toDoItem);
 		var i = $scope.toDoList.indexOf(toDoItem);
-		console.log(i);
+		//console.log(i);
 		toDoItem.isCompleted = true;
-		console.log(toDoItem);
+		//console.log(toDoItem);
 		$scope.toDoList[i] = toDoItem;
 		//delete $scope.toDoList[i];
 	}
@@ -104,10 +106,10 @@ myApp.controller("ToDoCtrl", function($scope, $http, $localStorage, $location, n
 		console.log(toDoItem);
 		console.log(toDoItem);
 		var i = $scope.toDoList.indexOf(toDoItem);
-		console.log(i);
+		//console.log(i);
 		//delete $scope.toDoList[i];
 		$scope.toDoList.splice(i, 1 );
-		console.log($scope.toDoList);
+		//console.log($scope.toDoList);
 	}
 	
 	$scope.saveToDos = function(){

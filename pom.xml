@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.todoproject.sample</groupId>
 	<artifactId>todoproject.sample</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-RELEASE</version>
 	<name>ToDoProject</name>
 	<description>sample project creating a todo application</description>
 	<properties>

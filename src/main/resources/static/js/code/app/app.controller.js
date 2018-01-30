@@ -5,20 +5,20 @@ myApp.controller('AppCtrl', function($scope, $http, $rootScope, $location, $loca
 	var path = $location.$$absUrl;
 	
 	this.$onInit = function() {
-		console.log($location.$$absUrl);
+		//console.log($location.$$absUrl);
 		//var path = $location.$$absUrl;
 		$http.get(path+"/api/getAllUsers").
 		then(function(response) {
-			console.log("from upper");
-			console.log(response.data);
+			console.log("success");
+			//console.log(response.data);
 		}, function(response){
-			console.log("from lower");
-			console.log(response.data);
+			console.log("failure");
+			//console.log(response.data);
 		});
 	};
 	//init();
 	$scope.getToDos = function(){
-		console.log($scope.userMail);
+		//console.log($scope.userMail);
 		$localStorage.email = $scope.userMail;
 		var userModel = {
 				"mailId":$scope.userMail,
@@ -29,7 +29,7 @@ myApp.controller('AppCtrl', function($scope, $http, $rootScope, $location, $loca
 		then(function(response){
 			$localStorage.email = $scope.userMail;
 			ngToast.success("Login Successful");
-			console.log(response);
+			//console.log(response);
 			$location.path("todos");
 		}, function(response){
 			if(response.status==417){
@@ -40,7 +40,7 @@ myApp.controller('AppCtrl', function($scope, $http, $rootScope, $location, $loca
 			else {
 				ngToast.danger("User Doesn't Exist. Kindly Register");
 			}
-			console.log(response);
+			//console.log(response);
 		});
 	}
 	
@@ -58,8 +58,8 @@ myApp.controller('AppCtrl', function($scope, $http, $rootScope, $location, $loca
 
 			$http.post(path+"/api/createUser").
 			then(function(response) {
-				console.log("from upper");
-				console.log(response.status);
+				//console.log("from upper");
+				//console.log(response.status);
 				if(response.status==200){
 					ngToast.success("User Registration Successful.");
 					$localStorage.email = $scope.userRegMail;
